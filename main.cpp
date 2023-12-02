@@ -1,31 +1,79 @@
 #include <raylib.h>
 #include <string>
 
-
-#define COLS 3
-#define ROWS 3
-
+#define COLS 3 //Columns in our grid
+#define ROWS 3 //Rows in our grid
 const int screenHeight = 400;
 const int screenWidth = 400;
-const int cellWidth = GetScreenWidth() / COLS;
-const int cellHeight = GetScreenHeight() / ROWS;
+const int tileWidth = screenWidth / COLS; //Tile width and height are the window width/height divded by the amount of columns
+const int tileHeight = screenHeight / ROWS;
 
-char board[3][3];
+enum TileState {X, O, EMPTY}; //Possible states for a tile
+
+class Tile {
+  public:
+    int x;
+    int y;
+    TileState state;
+};
+Tile board[ROWS][COLS]; //Creates the board in the memory out of an array of Tile objects
+void DrawTile(Tile); //Function for drawing the graphical representation of tiles
 
 int main() {
   InitWindow(screenWidth, screenHeight, "Tic-Tac-Toe");
-  SetWindowState(FLAG_VSYNC_HINT);
+  SetWindowState(FLAG_VSYNC_HINT); //Enables VSYNC
 
-  while (!WindowShouldClose()) {
+  TileState currentTurn = X;
+
+  //Very ugly nested loop which sets the tiles on the board
+  for (int x = 0; x < COLS; x++) { //X represents the ROWS on board
+    for (int y = 0; y < ROWS; y++) { //Y represents the COLS on board
+      board[x][y] = (Tile){.x = x, .y = y, .state = EMPTY}; //Set the x, y and state values of the tile object on x,y
+    }
+  }
+
+  while (!WindowShouldClose()) { //While the window is open
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) { //When the left mouse button is pressed
+      Vector2 mousePos = GetMousePosition(); 
+      int x = mousePos.x / tileWidth; //This math finds the x and y values (on the board) of the tile clicked
+      int y = mousePos.y / tileHeight;
+
+      if (board[x][y].state == EMPTY) { //If the tile clicked is empty
+        board[x][y].state = currentTurn; //Set the state to the current player's turn (X/O)
+        
+        switch (currentTurn) { 
+          case X: //If it's player X's turn, set currentTurn to O
+            printf("%i,%i is X\n", x, y);
+            currentTurn = O;
+            break;
+          case O: //If it's player O's turn, set currentTurn to X
+            printf("%i,%i is O\n", x, y);
+            currentTurn = X;
+            break;
+          default:
+            printf("An error occurred\n");
+        }
+
+      }
+    }
+
     BeginDrawing();
       ClearBackground(WHITE);
-      
-      for (int i = 0; i < COLS; i++) {
-        for (int j = 0; j < ROWS; j++) {
-          DrawRectangleLines(i * cellWidth, j * cellHeight, cellWidth, cellHeight, BLACK);
+
+      //Another very ugly nested loop which draws the board
+      for (int x = 0; x < COLS; x++) { //Horizontal indices
+        for (int y = 0; y < ROWS; y++) { //Vertical indices
+          DrawTile(board[x][y]);
         }
       }
 
     EndDrawing();
   }
+
+  return 0;
+}
+
+void DrawTile(Tile tile) {
+  //Draw a hollow rectangle using math i don't understand to set position
+  DrawRectangleLines(tile.x * tileWidth, tile.y * tileHeight, tileWidth, tileHeight, BLACK); 
 }
