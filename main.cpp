@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include <string>
 
-#define COLS 3 //Columns in our grid
+#define COLS 10 //Columns in our grid
 #define ROWS 3 //Rows in our grid
 const int screenHeight = 400;
 const int screenWidth = 400;
@@ -16,7 +16,7 @@ class Tile {
     int y;
     TileState state;
 };
-Tile board[ROWS][COLS]; //Creates the board in the memory out of an array of Tile objects
+Tile board[COLS][ROWS]; //Creates the board in the memory out of an array of Tile objects
 void DrawTile(Tile); //Function for drawing the graphical representation of tiles
 
 int main() {
@@ -26,8 +26,8 @@ int main() {
   TileState currentTurn = X;
 
   //Very ugly nested loop which sets the tiles on the board
-  for (int x = 0; x < ROWS; x++) { //X represents the ROWS on board
-    for (int y = 0; y < COLS; y++) { //Y represents the COLS on board
+  for (int x = 0; x < COLS; x++) { //X represents the COLS on board
+    for (int y = 0; y < ROWS; y++) { //Y represents the ROWS on board
       board[x][y] = (Tile){.x = x, .y = y, .state = EMPTY}; //Set the x, y and state values of the tile object on x,y
     }
   }
@@ -61,8 +61,8 @@ int main() {
       ClearBackground(WHITE);
 
       //Another very ugly nested loop which draws the board
-      for (int x = 0; x < ROWS; x++) { //Horizontal indices
-        for (int y = 0; y < COLS; y++) { //Vertical indices
+      for (int x = 0; x < COLS; x++) { //Horizontal indices
+        for (int y = 0; y < ROWS; y++) { //Vertical indices
           DrawTile(board[x][y]);
           switch (board[x][y].state) { //Decides what it should draw in the tile
             case X:
