@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include <string>
 
-#define COLS 10 //Columns in our grid
+#define COLS 3 //Columns in our grid
 #define ROWS 3 //Rows in our grid
 const int screenHeight = 400;
 const int screenWidth = 400;
