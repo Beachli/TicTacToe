@@ -64,6 +64,16 @@ int main() {
       for (int x = 0; x < COLS; x++) { //Horizontal indices
         for (int y = 0; y < ROWS; y++) { //Vertical indices
           DrawTile(board[x][y]);
+          switch (board[x][y].state) { //Decides what it should draw in the tile
+            case X:
+              DrawText("X", x * tileWidth + tileWidth / 4, y * tileHeight + tileHeight / 8, tileHeight - 20, BLACK);
+              break;
+            case O: 
+              DrawText("O", x * tileWidth + tileWidth / 4, y * tileHeight + tileHeight / 8, tileHeight - 20, BLACK);
+              break;
+            case EMPTY:
+              break;
+          }
         }
       }
 
