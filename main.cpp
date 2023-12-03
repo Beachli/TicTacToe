@@ -25,6 +25,7 @@ int main() {
 
   TileState currentTurn = X;
 
+
   //Very ugly nested loop which sets the tiles on the board
   for (int x = 0; x < COLS; x++) { //X represents the COLS on board
     for (int y = 0; y < ROWS; y++) { //Y represents the ROWS on board
@@ -33,6 +34,19 @@ int main() {
   }
 
   while (!WindowShouldClose()) { //While the window is open
+    const char *turnIndicator = nullptr; //Turn indicator text
+
+    switch (currentTurn) { //Switch statement to set turnIndicator
+      case X:
+        turnIndicator = "Player X";
+        break;
+      case O:
+        turnIndicator = "Player O";
+        break;
+      default:
+        printf("currentTurn is either NULL or EMPTY");
+    }
+
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) { //When the left mouse button is pressed
       Vector2 mousePos = GetMousePosition(); 
       int x = mousePos.x / tileWidth; //This math finds the x and y values (on the board) of the tile clicked
@@ -74,6 +88,9 @@ int main() {
             case EMPTY:
               break;
           }
+
+          int turnIndicatorWidth = MeasureText(turnIndicator, 20);
+          DrawText(turnIndicator, GetScreenWidth() / 2 - turnIndicatorWidth / 2, 5, 20, RED);
         }
       }
 
